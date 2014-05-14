@@ -1,0 +1,99 @@
+.ng-dropdown:before {
+  font-size: 1.5em;
+  content: "\25be";
+  float: right;
+  color: #7f8c8d;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.ng-dropdown {
+  position: relative;
+}
+
+.ng-dropdown-field {
+  height: 32px;
+  border: 1px solid #95a5a6;
+  /* change to color var */
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 0.4em;
+}
+
+.ng-dropdown-field:hover,
+.ng-dropdown-field.active {
+  border-color: #7f8c8d;
+}
+
+.ng-dropdown-field.active {
+  border-bottom-color: #bdc3c7;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.ng-dropdown-value:before {
+  content: "\00a0";
+  padding-right: 0;
+}
+
+.ng-dropdown-value {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 20px;
+}
+
+.ng-dropdown-menu {
+  border: 1px solid #7f8c8d;
+  /* change to color var */
+  border-top: 0;
+  left: 0;
+  background-color: #fff;
+  display: none;
+  width: 100%;
+  min-width: 100%;
+  position: absolute;
+  float: left;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 200px;
+  z-index: 999;
+}
+
+/*.fn-dropdown-menu-body {*/
+
+/*background-color: $white;*/
+
+/*border: solid 1px #ccc;*/
+
+/*border-top: 0;*/
+
+/*width: auto;*/
+
+/*overflow-y: auto;*/
+
+/*overflow-x: hidden;*/
+
+/*max-height: 200px;*/
+
+/*-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);*/
+
+/*box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);*/
+
+/*}*/
+
+.ng-dropdown-option {
+  cursor: pointer;
+  padding: 5px;
+}
+
+.ng-dropdown-option:hover {
+  color: #fff;
+  background-color: #3498db;
+}
+
+/* Used to make the dropdown menu visible */
+
+.open {
+  display: block;
+}

@@ -15,7 +15,7 @@ requirejs.config({
       'public/lib/angular-route/angular-route.min'
     ],
     'ng-dropdown': [
-      'dist/ng-dropdown'
+      'dist/js/ng-dropdown'
     ]
   },
   shim: {
@@ -38,7 +38,35 @@ require(['angular', 'angular-route', 'ng-dropdown'], function(angular) {
   app.controller('HomeController', [
     '$scope',
     function($scope) {
+      $scope.options = [
+        'Option 1',
+        'Option 2',
+        'Option 3'
+      ];
 
+      $scope.optionsTwo = [
+        'Cat Rider',
+        'Klapp Klapp',
+        'Pretty Girls',
+        'Paris',
+        'Only One',
+        'Ritual Union',
+        'Little Man',
+        'Shuffle A Dream',
+        'Crystalfilm',
+        'Precious',
+        'Summertearz',
+        'Twice',
+        'Recommendation',
+        'Forever',
+        'After The Rain',
+        'Wink'
+      ];
+
+      $scope.selected = {
+        one: $scope.options[0],
+        two: $scope.optionsTwo[0]
+      };
     }
   ]);
 

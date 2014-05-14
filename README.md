@@ -1,5 +1,4 @@
-# STILL IN DEVELOPMENT - DOES NOT WORK
-## [ng-dropdown](http://ianwalter.github.io/ng-dropdown/)
+# [ng-dropdown](http://ianwalter.github.io/ng-dropdown/)
 *A simple AngularJS directive to provide dropdown menu functionality!*
 
 This project was built using [ng-boilerplate](https://github.com/ianwalter/ng-boilerplate)!
