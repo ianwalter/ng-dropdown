@@ -43,10 +43,12 @@ var app = angular.module('dropdown-demo', ['ngRoute', 'ng-dropdown'])
 
 ```dropdown-menu``` is the ID of the dropdown menu you would like to display when the dropdown field is clicked.
 
-```dropdown-open-class``` is the class that "opens" or "shows" the dropdown menu which is initially hidden.
+```dropdown-open-class``` (optional) is the class that "shows" the dropdown menu which is initially hidden (defaults to 
+"open").
 
-```dropdown-option-class``` is a class added to each option in the dropdown so that the directive can eventually keep
- of which option is highlighted when using keyboard shortcuts like up arrow and down arrow.
+```dropdown-option-class``` (optional) is a class added to each option in the dropdown so that the directive can 
+eventually keep of which option is highlighted when using keyboard shortcuts like up arrow and down arrow (defaults to 
+"ng-dropdown-option").
 
 ```opened``` is the variable within the scope of the directive that evaluates to true when the dropdown menu is open.
 
