@@ -2,7 +2,7 @@
   "name": "ng-dropdown",
   "version": "0.0.1",
   "description": "A simple AngularJS directive to provide dropdown menu functionality!",
-  "main": "dist/ng-dropdown.min.js",
+  "main": "dist/js/ng-dropdown.min.js",
   "devDependencies": {
     "gulp": "~3.5.1",
     "gulp-concat": "~2.1.7",

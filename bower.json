@@ -15,7 +15,7 @@
   "license": "MIT",
   "homepage": "http://ianwalter.github.io/ng-dropdown/",
   "main": [
-    "dist/ng-dropdown.min.js",
+    "dist/js/ng-dropdown.min.js",
     "README.md"
   ],
   "ignore": [

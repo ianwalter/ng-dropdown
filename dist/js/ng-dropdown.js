@@ -13,6 +13,7 @@ angular
   .directive('dropdown', ['$document', '$parse', 'DropdownService', function($document, $parse, DropdownService) {
     return {
       restrict: 'A',
+      scope: {},
       link: function($scope, element, attrs) {
         var disabled = $scope.$eval(attrs.dropdownDisabled),
             openTarget,
