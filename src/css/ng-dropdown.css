@@ -14,6 +14,7 @@
   line-height: 32px;
 }
 .ng-dropdown {
+  background-color: white;
   cursor: pointer;
   position: relative;
 }
@@ -41,7 +42,6 @@
   padding-right: 0;
 }
 .ng-dropdown-value {
-  background-color: white;
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

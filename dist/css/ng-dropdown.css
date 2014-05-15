@@ -10,6 +10,7 @@
 }
 
 .ng-dropdown {
+  background-color: white;
   cursor: pointer;
   position: relative;
 }
@@ -40,7 +41,6 @@
 }
 
 .ng-dropdown-value {
-  background-color: white;
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
