@@ -7,6 +7,7 @@ angular
   .module('ng-dropdown', [])
   .factory('DropdownService', function() {
     return {
+      element: null,
       menuElement: null
     };
   })
@@ -18,33 +19,33 @@ angular
       },
       link: function($scope, element, attrs) {
         var disabled = $scope.$eval(attrs.dropdownDisabled),
-            openTarget,
-            openClass = attrs.dropdownOpenClass || 'open',
-            optionClass = attrs.dropdownOptionClass || 'option',
-            activeClass = attrs.dropdownActiveClass || 'active';
+          openTarget,
+          openClass = attrs.dropdownOpenClass || 'open',
+          optionClass = attrs.dropdownOptionClass || 'option',
+          activeClass = attrs.dropdownActiveClass || 'active';
         $scope.opened = false;
 
-        function open(menu) {
+        function open() {
           $scope.$apply(function() {
-            menu.addClass(openClass);
-            element.addClass(activeClass);
+            DropdownService.menuElement.addClass(openClass);
+            DropdownService.element.addClass(activeClass);
             $scope.opened = true;
           });
         }
 
-        function close(menu) {
+        function close() {
           $scope.$apply(function() {
-            menu.removeClass(openClass);
-            element.removeClass(activeClass);
+            DropdownService.menuElement.removeClass(openClass);
+            DropdownService.element.removeClass(activeClass);
             $scope.opened = false;
           });
         }
 
-        function toggle(menu) {
+        function toggle() {
           if ($scope.opened) {
-            close(menu);
+            close();
           } else {
-            open(menu);
+            open();
           }
         }
 
@@ -53,21 +54,22 @@ angular
             openTarget = angular.element(document.getElementById(attrs.dropdownMenu));
 
             if (DropdownService.menuElement && DropdownService.menuElement.attr('id') !== openTarget.attr('id')) {
-              close(DropdownService.menuElement);
+              close();
             }
             DropdownService.menuElement = openTarget;
+            DropdownService.element = element;
 
             event.preventDefault();
             event.stopPropagation();
 
-            toggle(DropdownService.menuElement);
+            toggle();
           }
         });
 
         $document.bind('keyup', function(event) {
           if (!disabled && $scope.opened) {
             if (event.keyCode === 27) { // Escape
-              close(DropdownService.menuElement);
+              close();
             } else if (event.keyCode === 40) { // Down
 
             } else if (event.keyCode === 38) { // Up
@@ -80,7 +82,7 @@ angular
 
         $document.bind('click', function() {
           if ($scope.opened && event.target !== openTarget) {
-            close(DropdownService.menuElement);
+            close();
           }
         });
       }
