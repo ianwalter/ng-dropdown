@@ -19,6 +19,7 @@
 }
 
 .ng-dropdown-field {
+  width: 100%;
   border: 1px solid var(--concrete);
   border-radius: 2px;
   padding-top: 6px;
