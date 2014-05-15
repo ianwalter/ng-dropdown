@@ -41,6 +41,7 @@
   padding-right: 0;
 }
 .ng-dropdown-value {
+  background-color: white;
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
