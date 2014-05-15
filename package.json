@@ -23,6 +23,16 @@
     "angularjs",
     "angular"
   ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "test",
+    "public",
+    "src",
+    "index.html",
+    "gulpfile.js",
+    "package.json"
+  ],
   "author": "Ian Kennington Walter (http://ianvonwalter.com)",
   "license": "MIT"
 }
