@@ -15,10 +15,11 @@
 }
 
 .ng-dropdown-field {
-  height: 34px;
   border: 1px solid #95a5a6;
   border-radius: 2px;
-  padding: 0.48em;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-indent: 6px;
 }
 
 .ng-dropdown-field:hover,
@@ -55,7 +56,6 @@
   background-color: white;
   display: none;
   width: 100%;
-  min-width: 100%;
   position: absolute;
   float: left;
   overflow-y: scroll;
@@ -66,7 +66,7 @@
 
 .ng-dropdown-menu .option {
   cursor: pointer;
-  padding: 5px;
+  padding: 5px 10px;
 }
 
 .ng-dropdown-menu .option:hover {

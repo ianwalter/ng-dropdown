@@ -4,11 +4,12 @@ var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     rename = require('gulp-rename'),
     connect = require('gulp-connect'),
-    myth = require('gulp-myth');
+    myth = require('gulp-myth'),
+    minifyCSS = require('gulp-minify-css');
 
 gulp.task('default', ['js', 'lint', 'css', 'connect'], function () {
-  var jsWatcher = gulp.watch('src/**/*.js', ['js', 'lint']);
-  var cssWatcher = gulp.watch('src/**/*.css', ['css']);
+  var jsWatcher = gulp.watch('src/js/**/*.js', ['js', 'lint']);
+  var cssWatcher = gulp.watch('src/css/**/*.css', ['css']);
 
   function changeNotification(event) {
     console.log('File', event.path, 'was', event.type, ', running tasks...');
@@ -36,7 +37,11 @@ gulp.task('js', function () {
 
 gulp.task('css', function () {
   return gulp.src('src/css/**/*.css')
+    .pipe(concat('ng-dropdown.css'))
     .pipe(myth())
+    .pipe(gulp.dest('dist/css'))
+    .pipe(minifyCSS())
+    .pipe(rename('ng-dropdown.min.css'))
     .pipe(gulp.dest('dist/css'))
     .pipe(connect.reload());
 });
