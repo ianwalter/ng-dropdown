@@ -13,33 +13,38 @@ angular
   .directive('dropdown', ['$document', '$parse', 'DropdownService', function($document, $parse, DropdownService) {
     return {
       restrict: 'A',
-      scope: {},
+      scope: {
+        opened: '@'
+      },
       link: function($scope, element, attrs) {
         var disabled = $scope.$eval(attrs.dropdownDisabled),
             openTarget,
             openClass = attrs.dropdownOpenClass || 'open',
-            optionClass = attrs.dropdownOptionClass || 'ng-dropdown-option';
+            optionClass = attrs.dropdownOptionClass || 'option',
+            activeClass = attrs.dropdownActiveClass || 'active';
         $scope.opened = false;
 
-        function open(element) {
+        function open(menu) {
           $scope.$apply(function() {
-            element.addClass(openClass);
+            menu.addClass(openClass);
+            element.addClass(activeClass);
             $scope.opened = true;
           });
         }
 
-        function close(element) {
+        function close(menu) {
           $scope.$apply(function() {
-            element.removeClass(openClass);
+            menu.removeClass(openClass);
+            element.removeClass(activeClass);
             $scope.opened = false;
           });
         }
 
-        function toggle(element) {
+        function toggle(menu) {
           if ($scope.opened) {
-            close(element);
+            close(menu);
           } else {
-            open(element);
+            open(menu);
           }
         }
 

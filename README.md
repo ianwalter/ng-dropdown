@@ -26,7 +26,7 @@ var app = angular.module('dropdown-demo', ['ngRoute', 'ng-dropdown'])
 <div dropdown id="dropdown-demo" class="ng-dropdown"
      dropdown-menu="dropdown-demo-menu"
      dropdown-open-class="open"
-     dropdown-option-class="ng-dropdown-option">
+     dropdown-option-class="option">
   <div class="ng-dropdown-field" ng-class="{ 'active': opened }">
     <div class="ng-dropdown-value" ng-bind="selected.one"></div>
   </div>
@@ -34,23 +34,26 @@ var app = angular.module('dropdown-demo', ['ngRoute', 'ng-dropdown'])
     <div ng-repeat="option in options"
          ng-bind="option"
          ng-click="selected.one = option"
-         class="ng-dropdown-option"></div>
+         class="option"></div>
   </div>
 </div>
 ```
 
-```dropdown``` is the name of the directive.
+```dropdown``` The name of the directive.
 
-```dropdown-menu``` is the ID of the dropdown menu you would like to display when the dropdown field is clicked.
+```dropdown-menu``` The ID of the dropdown menu you would like to display when the dropdown field is clicked.
 
-```dropdown-open-class``` (optional) is the class that "shows" the dropdown menu which is initially hidden (defaults to 
+```dropdown-open-class``` (optional) The class that "shows" the dropdown menu which is initially hidden (defaults to 
 "open").
 
-```dropdown-option-class``` (optional) is a class added to each option in the dropdown so that the directive can 
-eventually keep of which option is highlighted when using keyboard shortcuts like up arrow and down arrow (defaults to 
-"ng-dropdown-option").
+```dropdown-action-class``` (optional) The class that marks the dropdown as active so you can style it differently if
+necessary (defaults to "action").
 
-```opened``` is the variable within the scope of the directive that evaluates to true when the dropdown menu is open.
+```dropdown-option-class``` (optional) A class added to each option in the dropdown so that the directive can 
+eventually keep of which option is highlighted when using keyboard shortcuts like up arrow and down arrow (defaults to 
+"option").
+
+```opened``` The variable within the scope of the directive that evaluates to true when the dropdown menu is open.
 
 
 #### Disabling the dropdown

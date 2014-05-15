@@ -1,5 +1,5 @@
 /**
- * Example application for ng-timer (https://github.com/ianwalter/ng-timer)
+ * Example application for ng-autocomplete (https://github.com/ianwalter/ng-autocomplete)
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
  */
@@ -28,7 +28,7 @@ requirejs.config({
 require(['angular', 'angular-route', 'ng-dropdown'], function(angular) {
   "use strict";
 
-  var app = angular.module('menu-demo', ['ngRoute', 'ng-dropdown'])
+  var app = angular.module('ng-dropdown-demo', ['ngRoute', 'ng-dropdown'])
     .config(['$routeProvider', function($routeProvider) {
       $routeProvider
         .when('/', { controller: 'HomeController', templateUrl: 'public/template/home.html', label: 'Home' })
@@ -41,7 +41,7 @@ require(['angular', 'angular-route', 'ng-dropdown'], function(angular) {
       $scope.options = [
         'Option 1',
         'Option 2',
-        'Option 3'
+        'This is a really really long option called Option 3'
       ];
 
       $scope.optionsTwo = [
@@ -64,11 +64,10 @@ require(['angular', 'angular-route', 'ng-dropdown'], function(angular) {
       ];
 
       $scope.selected = {
-        one: $scope.options[0],
-        two: $scope.optionsTwo[0]
+        one: $scope.options[0]
       };
     }
   ]);
 
-  angular.bootstrap(document , ['menu-demo']);
+  angular.bootstrap(document , ['ng-dropdown-demo']);
 });

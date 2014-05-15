@@ -1,31 +1,32 @@
+
+
 .ng-dropdown:before {
   font-size: 1.5em;
   content: "\25be";
   float: right;
   color: #7f8c8d;
   margin-right: 10px;
-  cursor: pointer;
+  line-height: 32px;
 }
 
 .ng-dropdown {
+  cursor: pointer;
   position: relative;
 }
 
 .ng-dropdown-field {
-  height: 32px;
+  height: 34px;
   border: 1px solid #95a5a6;
-  /* change to color var */
   border-radius: 2px;
-  cursor: pointer;
-  padding: 0.4em;
+  padding: 0.48em;
 }
 
 .ng-dropdown-field:hover,
-.ng-dropdown-field.active {
+.ng-dropdown.active .ng-dropdown-field {
   border-color: #7f8c8d;
 }
 
-.ng-dropdown-field.active {
+.ng-dropdown.active .ng-dropdown-field {
   border-bottom-color: #bdc3c7;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
@@ -43,12 +44,15 @@
   margin-right: 20px;
 }
 
+.ng-dropdown-value.placeholder {
+  color: #bdc3c7;
+}
+
 .ng-dropdown-menu {
   border: 1px solid #7f8c8d;
-  /* change to color var */
   border-top: 0;
   left: 0;
-  background-color: #fff;
+  background-color: white;
   display: none;
   width: 100%;
   min-width: 100%;
@@ -60,35 +64,13 @@
   z-index: 999;
 }
 
-/*.fn-dropdown-menu-body {*/
-
-/*background-color: $white;*/
-
-/*border: solid 1px #ccc;*/
-
-/*border-top: 0;*/
-
-/*width: auto;*/
-
-/*overflow-y: auto;*/
-
-/*overflow-x: hidden;*/
-
-/*max-height: 200px;*/
-
-/*-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);*/
-
-/*box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);*/
-
-/*}*/
-
-.ng-dropdown-option {
+.ng-dropdown-menu .option {
   cursor: pointer;
   padding: 5px;
 }
 
-.ng-dropdown-option:hover {
-  color: #fff;
+.ng-dropdown-menu .option:hover {
+  color: white;
   background-color: #3498db;
 }
 
