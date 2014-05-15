@@ -26,8 +26,9 @@ var app = angular.module('dropdown-demo', ['ngRoute', 'ng-dropdown'])
 <div dropdown id="dropdown-demo" class="ng-dropdown"
      dropdown-menu="dropdown-demo-menu"
      dropdown-open-class="open"
+     dropdown-active-class="active"
      dropdown-option-class="option">
-  <div class="ng-dropdown-field" ng-class="{ 'active': opened }">
+  <div class="ng-dropdown-field">
     <div class="ng-dropdown-value" ng-bind="selected.one"></div>
   </div>
   <div id="dropdown-demo-menu" class="ng-dropdown-menu">
@@ -46,8 +47,8 @@ var app = angular.module('dropdown-demo', ['ngRoute', 'ng-dropdown'])
 ```dropdown-open-class``` (optional) The class that "shows" the dropdown menu which is initially hidden (defaults to 
 "open").
 
-```dropdown-action-class``` (optional) The class that marks the dropdown as active so you can style it differently if
-necessary (defaults to "action").
+```dropdown-active-class``` (optional) The class that marks the dropdown as active so you can style it differently if
+necessary (defaults to "active").
 
 ```dropdown-option-class``` (optional) A class added to each option in the dropdown so that the directive can 
 eventually keep of which option is highlighted when using keyboard shortcuts like up arrow and down arrow (defaults to 
