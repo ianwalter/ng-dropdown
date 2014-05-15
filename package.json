@@ -1,6 +1,6 @@
 {
   "name": "ng-dropdown",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A simple AngularJS directive to provide dropdown menu functionality!",
   "main": "dist/js/ng-dropdown.min.js",
   "devDependencies": {
