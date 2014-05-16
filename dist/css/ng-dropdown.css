@@ -22,6 +22,7 @@
   padding-top: 6px;
   padding-bottom: 6px;
   text-indent: 6px;
+  min-height: 32px;
 }
 
 .ng-dropdown-field:hover,
