@@ -1,14 +1,5 @@
 
 
-.ng-dropdown:before {
-  font-size: 1.5em;
-  content: "\25be";
-  float: right;
-  color: #7f8c8d;
-  margin-right: 10px;
-  line-height: 32px;
-}
-
 .ng-dropdown {
   background-color: white;
   cursor: pointer;
@@ -19,10 +10,17 @@
   width: 100%;
   border: 1px solid #95a5a6;
   border-radius: 2px;
-  padding-top: 6px;
-  padding-bottom: 6px;
   text-indent: 6px;
   min-height: 32px;
+  line-height: 32px;
+}
+
+.ng-dropdown-field:before {
+  font-size: 1.5em;
+  content: "\25be";
+  float: right;
+  color: #7f8c8d;
+  margin-right: 10px;
 }
 
 .ng-dropdown-field:hover,

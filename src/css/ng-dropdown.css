@@ -5,14 +5,6 @@
   --peter-river: #3498db;
 }
 
-.ng-dropdown:before {
-  font-size: 1.5em;
-  content: "\25be";
-  float: right;
-  color: var(--asbestos);
-  margin-right: 10px;
-  line-height: 32px;
-}
 .ng-dropdown {
   background-color: white;
   cursor: pointer;
@@ -23,10 +15,16 @@
   width: 100%;
   border: 1px solid var(--concrete);
   border-radius: 2px;
-  padding-top: 6px;
-  padding-bottom: 6px;
   text-indent: 6px;
   min-height: 32px;
+  line-height: 32px;
+}
+.ng-dropdown-field:before {
+  font-size: 1.5em;
+  content: "\25be";
+  float: right;
+  color: var(--asbestos);
+  margin-right: 10px;
 }
 .ng-dropdown-field:hover,
 .ng-dropdown.active .ng-dropdown-field {
@@ -47,6 +45,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-right: 20px;
+
+
 }
 .ng-dropdown-value.placeholder {
   color: var(--silver);
