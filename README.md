@@ -1,6 +1,8 @@
 # [ng-dropdown](http://ianwalter.github.io/ng-dropdown/)
 *A simple AngularJS directive to provide dropdown menu functionality!*
 
+[![Code Climate](https://codeclimate.com/github/ianwalter/ng-dropdown.png)](https://codeclimate.com/github/ianwalter/ng-dropdown)
+
 This project was built using [ng-boilerplate](https://github.com/ianwalter/ng-boilerplate)!
 
 #### Step 1: Install ng-dropdown
