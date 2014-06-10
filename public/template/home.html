@@ -37,7 +37,7 @@
      class="ng-dropdown">
   <div class="ng-dropdown-field">
     <div class="ng-dropdown-value" ng-if="selected.three && selected.one !== options[0]" ng-bind="selected.three"></div>
-    <div class="ng-dropdown-value placeholder" ng-if="!selected.three && selected.one === options[0]">Disabled</div>
+    <div class="ng-dropdown-value placeholder" ng-if="selected.one === options[0]">Disabled</div>
     <div class="ng-dropdown-value placeholder" ng-if="!selected.three && selected.one !== options[0]">Select</div>
   </div>
   <div id="dropdown-demo-menu-three" class="ng-dropdown-menu">
