@@ -63,6 +63,14 @@ require(['angular', 'angular-route', 'ng-dropdown'], function(angular) {
         'Wink'
       ];
 
+      $scope.optionsThree = [
+        'Cash',
+        'Rules',
+        'Everything',
+        'Around',
+        'Me'
+      ];
+
       $scope.selected = {
         one: $scope.options[0]
       };

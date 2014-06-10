@@ -1,5 +1,5 @@
 /**
- * ng-dropdown - v0.0.8 - A simple AngularJS directive to provide dropdown menu functionality!
+ * ng-dropdown - v0.0.9 - A simple AngularJS directive to provide dropdown menu functionality!
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
  */
@@ -15,15 +15,23 @@ angular
     return {
       restrict: 'A',
       scope: {
+        disabled: '&dropdownDisabled',
         opened: '@'
       },
       link: function($scope, element, attrs) {
-        var disabled = $scope.$eval(attrs.dropdownDisabled),
-          openTarget,
-          openClass = attrs.dropdownOpenClass || 'open',
-          optionClass = attrs.dropdownOptionClass || 'option',
-          activeClass = attrs.dropdownActiveClass || 'active';
+        var openTarget,
+            openClass = attrs.dropdownOpenClass || 'open',
+            optionClass = attrs.dropdownOptionClass || 'option', // TODO will be used when scrolling options implemented
+            activeClass = attrs.dropdownActiveClass || 'active';
         $scope.opened = false;
+
+        $scope.$watch('disabled()', function(val) {
+          if (val) {
+            element.addClass('dropdown-disabled');
+          } else {
+            element.removeClass('dropdown-disabled');
+          }
+        });
 
         function open() {
           $scope.$apply(function() {
@@ -50,7 +58,7 @@ angular
         }
 
         element.bind('click', function(event) {
-          if (!disabled) {
+          if (!$scope.disabled()) {
             openTarget = angular.element(document.getElementById(attrs.dropdownMenu));
 
             if (DropdownService.menuElement && DropdownService.menuElement.attr('id') !== openTarget.attr('id')) {
@@ -67,7 +75,7 @@ angular
         });
 
         $document.bind('keyup', function(event) {
-          if (!disabled && $scope.opened) {
+          if (!$scope.disabled() && $scope.opened) {
             if (event.keyCode === 27) { // Escape
               close();
             } else if (event.keyCode === 40) { // Down

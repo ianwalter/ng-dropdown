@@ -15,6 +15,10 @@
   line-height: 32px;
 }
 
+.dropdown-disabled .ng-dropdown-field {
+  border-color: #bdc3c7;
+}
+
 .ng-dropdown-field:before {
   font-size: 1.5em;
   content: "\25be";
@@ -23,9 +27,17 @@
   margin-right: 10px;
 }
 
+.dropdown-disabled .ng-dropdown-field:before {
+  color: #bdc3c7;
+}
+
 .ng-dropdown-field:hover,
 .ng-dropdown.active .ng-dropdown-field {
   border-color: #7f8c8d;
+}
+
+.dropdown-disabled .ng-dropdown-field:hover {
+  border-color: #bdc3c7;
 }
 
 .ng-dropdown.active .ng-dropdown-field {

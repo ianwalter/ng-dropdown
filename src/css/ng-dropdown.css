@@ -19,6 +19,10 @@
   min-height: 32px;
   line-height: 32px;
 }
+.dropdown-disabled .ng-dropdown-field {
+  border-color: var(--silver);
+}
+
 .ng-dropdown-field:before {
   font-size: 1.5em;
   content: "\25be";
@@ -26,10 +30,19 @@
   color: var(--asbestos);
   margin-right: 10px;
 }
+.dropdown-disabled .ng-dropdown-field:before {
+  color: var(--silver);
+}
+
+
 .ng-dropdown-field:hover,
 .ng-dropdown.active .ng-dropdown-field {
   border-color: var(--asbestos);
 }
+.dropdown-disabled .ng-dropdown-field:hover {
+  border-color: var(--silver);
+}
+
 .ng-dropdown.active .ng-dropdown-field {
   border-bottom-color: var(--silver);
   border-bottom-left-radius: 0;
