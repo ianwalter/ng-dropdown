@@ -76,7 +76,7 @@ angular
 
         $document.bind('keyup', function(event) {
           if (!$scope.disabled() && ($scope.opened || document.activeElement === dropdownField)) {
-            if (event.keyCode === 27) { // Escape
+            if (event.keyCode === 27 || event.keyCode === 9) { // Escape or Tab
               close();
             } else if (event.keyCode === 40) { // Down
               //nextOption();
@@ -93,7 +93,7 @@ angular
         });
 
         $document.bind('click', function() {
-          if ($scope.opened && event.target !== openTarget) {
+          if ($scope.opened && event.target !== DropdownService.menuElement) {
             close();
           }
         });
