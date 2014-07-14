@@ -19,8 +19,7 @@ angular
         opened: '@'
       },
       link: function($scope, element, attrs) {
-        var openTarget,
-            dropdownField = element[0].querySelector('.ng-dropdown-field'),
+        var dropdownField = element[0].querySelector('.ng-dropdown-field'),
             openClass = attrs.dropdownOpenClass || 'open',
             optionClass = attrs.dropdownOptionClass || 'option', // TODO will be used when scrolling options implemented
             activeClass = attrs.dropdownActiveClass || 'active';
@@ -60,7 +59,7 @@ angular
 
         element.bind('click', function(event) {
           if (!$scope.disabled()) {
-            openTarget = angular.element(document.getElementById(attrs.dropdownMenu));
+            var openTarget = angular.element(document.getElementById(attrs.dropdownMenu));
 
             if (DropdownService.menuElement && DropdownService.menuElement.attr('id') !== openTarget.attr('id')) {
               close();
@@ -80,13 +79,13 @@ angular
             if (event.keyCode === 27) { // Escape
               close();
             } else if (event.keyCode === 40) { // Down
-
+              //nextOption();
             } else if (event.keyCode === 38) { // Up
-
+              //previousOption();
             } else if (event.keyCode === 13) { // Enter
               if (document.activeElement === dropdownField) {
-                openTarget = angular.element(document.getElementById(attrs.dropdownMenu));
-                DropdownService.menuElement = openTarget;
+                DropdownService.element = element;
+                DropdownService.menuElement = angular.element(document.getElementById(attrs.dropdownMenu));
                 open();
               }
             }

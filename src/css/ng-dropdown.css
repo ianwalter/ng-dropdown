@@ -94,6 +94,7 @@
   cursor: pointer;
   padding: 5px 10px;
 }
+.ng-dropdown-menu .option.active,
 .ng-dropdown-menu .option:hover {
   color: white;
   background-color: var(--peter-river);
