@@ -1,6 +1,6 @@
 {
   "name": "ng-dropdown",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple AngularJS directive to provide dropdown menu functionality!",
   "keywords": [
     "ng-dropdown",
@@ -22,11 +22,12 @@
     "**/.*",
     "node_modules",
     "test",
-    "assets",
+    "public",
     "src",
     "index.html",
     "gulpfile.js",
-    "package.json"
+    "package.json",
+    "karma.conf.js"
   ],
   "dependencies": {
     "angular": ">= 1.2.5"
