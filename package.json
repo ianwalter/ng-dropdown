@@ -34,5 +34,9 @@
     "package.json"
   ],
   "author": "Ian Kennington Walter (http://ianvonwalter.com)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "gulp-karma": "0.0.4",
+    "karma": "^0.12.17"
+  }
 }

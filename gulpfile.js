@@ -3,21 +3,15 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     jshint = require('gulp-jshint'),
     rename = require('gulp-rename'),
+    karma = require('gulp-karma'),
     connect = require('gulp-connect'),
     myth = require('gulp-myth'),
-    minifyCSS = require('gulp-minify-css');
+    minifyCSS = require('gulp-minify-css'),
+    debug = false,
+    WATCH_MODE = 'watch',
+    RUN_MODE = 'run';
 
-gulp.task('default', ['js', 'lint', 'css', 'connect'], function () {
-  var jsWatcher = gulp.watch('src/js/**/*.js', ['js', 'lint']);
-  var cssWatcher = gulp.watch('src/css/**/*.css', ['css']);
-
-  function changeNotification(event) {
-    console.log('File', event.path, 'was', event.type, ', running tasks...');
-  }
-
-  jsWatcher.on('change', changeNotification);
-  cssWatcher.on('change', changeNotification);
-});
+var mode = WATCH_MODE;
 
 gulp.task('lint', function () {
   gulp.src('src/**/*.js')
@@ -25,30 +19,48 @@ gulp.task('lint', function () {
     .pipe(jshint.reporter('default'));
 });
 
-gulp.task('js', function () {
-  gulp.src('src/js/**/*.js')
+//gulp.task('karma', function() {
+//  // undefined.js: unfortunately necessary for now
+//  gulp.src(['undefined.js'])
+//    .pipe(karma({
+//      configFile: 'karma.conf.js',
+//      action: mode
+//    }))
+//    .on('error', function() {});
+//});
+
+gulp.task('js', function() {
+  var jsTask = gulp
+    .src('src/js/**/*.js')
     .pipe(concat('ng-dropdown.js'))
-    .pipe(gulp.dest('dist/js'))
-    .pipe(uglify())
+    .pipe(gulp.dest('dist/js'));
+  if (!debug) {
+    jsTask.pipe(uglify());
+  }
+  jsTask
     .pipe(rename('ng-dropdown.min.js'))
     .pipe(gulp.dest('dist/js'))
     .pipe(connect.reload());
 });
 
 gulp.task('css', function () {
-  return gulp.src('src/css/**/*.css')
+  var cssTask = gulp
+    .src('src/css/**/*.css')
     .pipe(concat('ng-dropdown.css'))
     .pipe(myth())
-    .pipe(gulp.dest('dist/css'))
-    .pipe(minifyCSS())
+    .pipe(gulp.dest('dist/css'));
+  if (!debug) {
+    cssTask.pipe(minifyCSS());
+  }
+  cssTask
     .pipe(rename('ng-dropdown.min.css'))
     .pipe(gulp.dest('dist/css'))
     .pipe(connect.reload());
 });
 
 gulp.task('connect', function() {
-  gulp.watch(['public/**/*', 'index.html'], function() {
-    gulp.src(['public/**/*', 'index.html'])
+  gulp.watch(['index.html'], function() {
+    gulp.src(['index.html'])
       .pipe(connect.reload());
   });
 
@@ -56,3 +68,35 @@ gulp.task('connect', function() {
     livereload: true
   });
 });
+
+gulp.task('kill-connect', ['protractor'], function() {
+  connect.serverClose();
+});
+
+gulp.task('run-mode', function() {
+  mode = RUN_MODE;
+});
+
+gulp.task('debug', function() {
+  debug = true;
+});
+
+function changeNotification(event) {
+  console.log('File', event.path, 'was', event.type, ', running tasks...');
+}
+
+function watch() {
+  var jsWatcher = gulp.watch('src/js/**/*.js', ['js', 'lint']),
+      cssWatcher = gulp.watch('src/css/**/*.css', ['css']);
+
+  jsWatcher.on('change', changeNotification);
+  cssWatcher.on('change', changeNotification);
+}
+
+gulp.task('all', ['css', 'js', 'lint']);
+
+gulp.task('default', ['all'], watch);
+
+gulp.task('server', ['connect', 'default']);
+
+gulp.task('test', ['run-mode', 'debug', 'connect', 'all', 'kill-connect']);

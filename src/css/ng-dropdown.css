@@ -19,6 +19,11 @@
   min-height: 32px;
   line-height: 32px;
 }
+.ng-dropdown-field:focus {
+  outline: none;
+  border-color: var(--peter-river);
+  color: var(--peter-river);
+}
 .dropdown-disabled .ng-dropdown-field {
   border-color: var(--silver);
 }
@@ -30,21 +35,26 @@
   color: var(--asbestos);
   margin-right: 10px;
 }
+.ng-dropdown-field:focus:before {
+  color: var(--peter-river);
+}
 .dropdown-disabled .ng-dropdown-field:before {
   color: var(--silver);
 }
 
 
-.ng-dropdown-field:hover,
-.ng-dropdown.active .ng-dropdown-field {
+.ng-dropdown-field:hover {
   border-color: var(--asbestos);
+}
+.ng-dropdown.active .ng-dropdown-field {
+  border-color: var(--peter-river);
 }
 .dropdown-disabled .ng-dropdown-field:hover {
   border-color: var(--silver);
 }
 
 .ng-dropdown.active .ng-dropdown-field {
-  border-bottom-color: var(--silver);
+  border-bottom-color: var(--peter-river);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -66,7 +76,7 @@
 }
 
 .ng-dropdown-menu {
-  border: 1px solid var(--asbestos);
+  border: 1px solid var(--peter-river);
   border-top: 0;
   left: 0;
   background-color: white;

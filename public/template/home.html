@@ -4,7 +4,7 @@
      dropdown-open-class="open"
      dropdown-active-class="active"
      dropdown-option-class="option">
-  <div class="ng-dropdown-field">
+  <div class="ng-dropdown-field" tabindex="1">
     <div class="ng-dropdown-value" ng-bind="selected.one"></div>
   </div>
   <div id="dropdown-demo-menu" class="ng-dropdown-menu">
@@ -17,9 +17,9 @@
 <br>
 <h4>Dropdown 2</h4>
 <div dropdown id="dropdown-demo-two" class="ng-dropdown" dropdown-menu="dropdown-demo-menu-two">
-  <div class="ng-dropdown-field">
+  <div class="ng-dropdown-field"  tabindex="2">
     <div class="ng-dropdown-value" ng-if="selected.two" ng-bind="selected.two"></div>
-    <div class="ng-dropdown-value placeholder" ng-if="!selected.two">Select a song</div>
+    <!--<div class="ng-dropdown-value placeholder" ng-if="!selected.two">Select a song</div>-->
   </div>
   <div id="dropdown-demo-menu-two" class="ng-dropdown-menu">
     <div ng-repeat="option in optionsTwo"
@@ -35,7 +35,7 @@
      dropdown-menu="dropdown-demo-menu-three"
      id="dropdown-demo-three"
      class="ng-dropdown">
-  <div class="ng-dropdown-field">
+  <div class="ng-dropdown-field" tabindex="3">
     <div class="ng-dropdown-value" ng-if="selected.three && selected.one !== options[0]" ng-bind="selected.three"></div>
     <div class="ng-dropdown-value placeholder" ng-if="selected.one === options[0]">Disabled</div>
     <div class="ng-dropdown-value placeholder" ng-if="!selected.three && selected.one !== options[0]">Select</div>
