@@ -11,92 +11,157 @@ angular
       menuElement: null
     };
   })
-  .directive('dropdown', ['$document', '$parse', 'DropdownService', function($document, $parse, DropdownService) {
-    return {
-      restrict: 'A',
-      scope: {
-        disabled: '&dropdownDisabled',
-        opened: '@'
-      },
-      link: function($scope, element, attrs) {
-        var dropdownField = element[0].querySelector('.ng-dropdown-field'),
-            openClass = attrs.dropdownOpenClass || 'open',
-            optionClass = attrs.dropdownOptionClass || 'option', // TODO will be used when scrolling options implemented
-            activeClass = attrs.dropdownActiveClass || 'active';
-        $scope.opened = false;
+  .directive('dropdown', [
+    '$document',
+    '$parse',
+    'DropdownService',
+    function($document, $parse, DropdownService) {
+      return {
+        restrict: 'A',
+        scope: {
+          disabled: '&dropdownDisabled',
+          opened: '@'
+        },
+        link: function($scope, element, attrs) {
+          var dropdownField = element[0].querySelector('.ng-dropdown-field'),
+              openClass = attrs.dropdownOpenClass || 'open',
+              activeClass = attrs.dropdownActiveClass || 'active',
+              options;
+          $scope.opened = false;
 
-        $scope.$watch('disabled()', function(val) {
-          if (val) {
-            element.addClass('dropdown-disabled');
-          } else {
-            element.removeClass('dropdown-disabled');
-          }
-        });
-
-        function open() {
-          $scope.$apply(function() {
-            DropdownService.menuElement.addClass(openClass);
-            DropdownService.element.addClass(activeClass);
-            $scope.opened = true;
-          });
-        }
-
-        function close() {
-          $scope.$apply(function() {
-            DropdownService.menuElement.removeClass(openClass);
-            DropdownService.element.removeClass(activeClass);
-            $scope.opened = false;
-          });
-        }
-
-        function toggle() {
-          if ($scope.opened) {
-            close();
-          } else {
-            open();
-          }
-        }
-
-        element.bind('click', function(event) {
-          if (!$scope.disabled()) {
-            var openTarget = angular.element(document.getElementById(attrs.dropdownMenu));
-
-            if (DropdownService.menuElement && DropdownService.menuElement.attr('id') !== openTarget.attr('id')) {
-              close();
+          $scope.$watch('disabled()', function(val) {
+            if (val) {
+              element.addClass('dropdown-disabled');
+            } else {
+              element.removeClass('dropdown-disabled');
             }
-            DropdownService.menuElement = openTarget;
-            DropdownService.element = element;
+          });
 
-            event.preventDefault();
-            event.stopPropagation();
-
-            toggle();
+          function open() {
+            if (!$scope.opened) {
+              $scope.$apply(function() {
+                DropdownService.menuElement.addClass(openClass);
+                DropdownService.element.addClass(activeClass);
+                $scope.opened = true;
+              });
+            }
           }
-        });
 
-        $document.bind('keyup', function(event) {
-          if (!$scope.disabled() && ($scope.opened || document.activeElement === dropdownField)) {
-            if (event.keyCode === 27 || event.keyCode === 9) { // Escape or Tab
+          function close() {
+            if ($scope.opened) {
+              $scope.$apply(function() {
+                DropdownService.menuElement.removeClass(openClass);
+                DropdownService.element.removeClass(activeClass);
+                $scope.opened = false;
+                clearCurrentOption();
+              });
+            }
+          }
+
+          function toggle() {
+            if ($scope.opened) {
               close();
-            } else if (event.keyCode === 40) { // Down
-              //nextOption();
-            } else if (event.keyCode === 38) { // Up
-              //previousOption();
-            } else if (event.keyCode === 13) { // Enter
-              if (document.activeElement === dropdownField) {
-                DropdownService.element = element;
-                DropdownService.menuElement = angular.element(document.getElementById(attrs.dropdownMenu));
-                open();
+            } else {
+              open();
+            }
+          }
+
+          function getOptions() {
+            return Array.prototype.map.call(DropdownService.menuElement.children(), function(option) {
+              return option;
+            });
+          }
+
+          function clearCurrentOption() {
+            if ($scope.currentOption) {
+              angular.element($scope.currentOption).removeClass(activeClass);
+              delete $scope.currentOption;
+            }
+          }
+
+          function nextOption() {
+            open();
+            if (!options) {
+              options = getOptions();
+              $scope.currentOption = options[0];
+            } else {
+              var index = options.indexOf($scope.currentOption) + 1;
+              clearCurrentOption();
+              $scope.currentOption = options.length > index ? options[index] : options[0];
+            }
+            angular.element($scope.currentOption).addClass(activeClass);
+          }
+
+          function previousOption() {
+            open();
+            if (!options) {
+              options = getOptions();
+              $scope.currentOption = options[0];
+            } else {
+              var index = options.indexOf($scope.currentOption) - 1;
+              clearCurrentOption();
+              $scope.currentOption = index >= 0 ? options[index] : options[options.length - 1];
+            }
+            angular.element($scope.currentOption).addClass(activeClass);
+          }
+
+          angular.element(document.getElementById(attrs.dropdownMenu)).bind('mouseenter', function() {
+            clearCurrentOption();
+          });
+
+          element.bind('click', function(e) {
+            if (!$scope.disabled()) {
+              var openTarget = angular.element(document.getElementById(attrs.dropdownMenu));
+
+              if (DropdownService.menuElement && DropdownService.menuElement.attr('id') !== openTarget.attr('id')) {
+                close();
+              }
+              DropdownService.menuElement = openTarget;
+              DropdownService.element = element;
+
+              e.preventDefault();
+              e.stopPropagation();
+
+              toggle();
+            }
+          });
+
+          $document.bind('keydown', function(e) {
+            if (!$scope.disabled() && ($scope.opened || document.activeElement === dropdownField)) {
+
+              if (e.keyCode === 9) {
+                close();
+                return;
+              } else {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+
+              DropdownService.element = element;
+              DropdownService.menuElement = angular.element(document.getElementById(attrs.dropdownMenu));
+
+              if (e.keyCode === 27) { // Escape
+                close();
+              } else if (e.keyCode === 40) { // Down
+                nextOption();
+              } else if (e.keyCode === 38) { // Up
+                previousOption();
+              } else if (e.keyCode === 13) { // Enter
+                if ($scope.currentOption && $scope.opened && document.activeElement === dropdownField) {
+                  $scope.currentOption.click();
+                } else if (!$scope.opened && document.activeElement === dropdownField) {
+                  open();
+                }
               }
             }
-          }
-        });
+          });
 
-        $document.bind('click', function() {
-          if ($scope.opened && event.target !== DropdownService.menuElement) {
-            close();
-          }
-        });
-      }
-    };
-  }]);
+          $document.bind('click', function() {
+            if ($scope.opened && event.target !== DropdownService.menuElement) {
+              close();
+            }
+          });
+        }
+      };
+    }
+  ]);
