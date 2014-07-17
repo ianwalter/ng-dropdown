@@ -125,18 +125,20 @@ angular
           });
 
           $document.bind('keydown', function(e) {
-            if (!$scope.disabled() && ($scope.opened || document.activeElement === dropdownField)) {
+            if (!$scope.disabled() &&
+                ($scope.opened || document.activeElement === dropdownField) &&
+                [9, 27, 40, 38, 13].indexOf(e.keyCode) !== -1) {
 
-              if (e.keyCode === 9) {
+              DropdownService.element = element;
+              DropdownService.menuElement = angular.element(document.getElementById(attrs.dropdownMenu));
+
+              if (e.keyCode === 9) { // Tab
                 close();
                 return;
               } else {
                 e.preventDefault();
                 e.stopPropagation();
               }
-
-              DropdownService.element = element;
-              DropdownService.menuElement = angular.element(document.getElementById(attrs.dropdownMenu));
 
               if (e.keyCode === 27) { // Escape
                 close();
