@@ -1,5 +1,5 @@
 /**
- * ng-dropdown - v0.1.1 - A simple AngularJS directive to provide dropdown menu functionality!
+ * ng-dropdown - v1.0.0 - A simple AngularJS directive to provide dropdown menu functionality!
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
  */
@@ -48,14 +48,12 @@ angular
           }
 
           function close() {
-            if ($scope.opened) {
-              $scope.$apply(function() {
-                DropdownService.menuElement.removeClass(openClass);
-                DropdownService.element.removeClass(activeClass);
-                $scope.opened = false;
-                clearCurrentOption();
-              });
-            }
+            $scope.$apply(function() {
+              DropdownService.menuElement.removeClass(openClass);
+              DropdownService.element.removeClass(activeClass);
+              $scope.opened = false;
+              clearCurrentOption();
+            });
           }
 
           function toggle() {
@@ -156,8 +154,8 @@ angular
             }
           });
 
-          $document.bind('click', function() {
-            if ($scope.opened && event.target !== DropdownService.menuElement) {
+          $document.bind('click', function(e) {
+            if ($scope.opened && e.target !== DropdownService.menuElement) {
               close();
             }
           });
