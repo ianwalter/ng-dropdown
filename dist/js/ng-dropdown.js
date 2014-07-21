@@ -1,5 +1,5 @@
 /**
- * ng-dropdown - v1.0.0 - A simple AngularJS directive to provide dropdown menu functionality!
+ * ng-dropdown - v1.0.1 - A simple AngularJS directive to provide dropdown menu functionality!
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
  */
@@ -88,6 +88,8 @@ angular
               $scope.currentOption = options.length > index ? options[index] : options[0];
             }
             angular.element($scope.currentOption).addClass(activeClass);
+
+            DropdownService.menuElement[0].scrollTop = $scope.currentOption.offsetTop;
           }
 
           function previousOption() {
@@ -101,6 +103,8 @@ angular
               $scope.currentOption = index >= 0 ? options[index] : options[options.length - 1];
             }
             angular.element($scope.currentOption).addClass(activeClass);
+
+            DropdownService.menuElement[0].scrollTop = $scope.currentOption.offsetTop;
           }
 
           angular.element(document.getElementById(attrs.dropdownMenu)).bind('mouseenter', function() {
