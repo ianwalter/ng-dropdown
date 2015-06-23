@@ -1,5 +1,5 @@
 /**
- * ng-dropdown - v1.0.3 - A simple AngularJS directive to provide dropdown menu
+ * ng-dropdown - v1.0.4 - A simple AngularJS directive to provide dropdown menu
  * functionality!
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
@@ -70,7 +70,8 @@
           restrict: 'A',
           scope: {
             dropdown: '=?',
-            disabled: '&dropdownDisabled'
+            disabled: '&dropdownDisabled',
+            preventOnClick: '=dropdownPreventOnClick'
           },
           link: function($scope, element, attrs) {
             var dropdownField = element[0].querySelector('.ng-dropdown-field'),
@@ -156,7 +157,7 @@
               });
 
             element.bind('click', function(e) {
-              if (!$scope.disabled()) {
+              if (!$scope.preventOnClick && !$scope.disabled()) {
                 var openTarget = angular.element(
                   document.getElementById(attrs.dropdownMenu)
                 );

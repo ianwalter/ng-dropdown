@@ -24,7 +24,9 @@
 </section>
 <section>
   <div class="span-10">
-    <div dropdown="secondDropdown" id="dropdown-demo-two" class="ng-dropdown" dropdown-menu="dropdown-demo-menu-two">
+    <div dropdown="secondDropdown" id="dropdown-demo-two" class="ng-dropdown"
+         dropdown-menu="dropdown-demo-menu-two"
+         dropdown-prevent-on-click="true">
       <div class="ng-dropdown-field"  tabindex="2">
         <div class="ng-dropdown-value" ng-if="selected.two" ng-bind="selected.two"></div>
         <!--<div class="ng-dropdown-value placeholder" ng-if="!selected.two">Select a song</div>-->
