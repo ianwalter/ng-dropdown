@@ -9,24 +9,42 @@
 (function (angular) {
   'use strict';
 
-  angular.module('ng-dropdown', []).service('DropdownService', function () {
+  angular.module('ng-dropdown', []).service('DropdownService', ['$document', function ($document) {
+    var _this2 = this;
 
     this.dropdowns = [];
 
     this.open = function (id) {
-      // console.log('open', id);
+      var _this = this;
+
+      /// console.log('open', id);
       var dropdown = this.dropdowns[id];
-      dropdown.element.addClass(dropdown.activeClass);
-      dropdown.menuElement.addClass(dropdown.openClass);
-      dropdown.opened = true;
+      if (!dropdown.opened) {
+        if (this.currentlyOpen || this.currentlyOpen === 0) {
+          this.close(this.currentlyOpen);
+        }
+
+        dropdown.element.addClass(dropdown.activeClass);
+        dropdown.menuElement.addClass(dropdown.openClass);
+        dropdown.opened = true;
+
+        // Prevent immediate open-close from toggle button
+        setTimeout(function () {
+          return _this.currentlyOpen = id;
+        }, 0);
+      }
     };
 
     this.close = function (id) {
       // console.log('close', id);
       var dropdown = this.dropdowns[id];
-      dropdown.element.removeClass(dropdown.activeClass);
-      dropdown.menuElement.removeClass(dropdown.openClass);
-      dropdown.opened = false;
+      if (dropdown.opened) {
+        dropdown.element.removeClass(dropdown.activeClass);
+        dropdown.menuElement.removeClass(dropdown.openClass);
+        dropdown.opened = false;
+
+        delete this.currentlyOpen;
+      }
     };
 
     this.toggle = function (id) {
@@ -37,28 +55,38 @@
         this.open(id);
       }
     };
-  }).directive('dropdown', ['$document', '$parse', 'DropdownService', function ($document, $parse, DropdownService) {
+
+    $document.bind('click', function (e) {
+      if (_this2.currentlyOpen || _this2.currentlyOpen === 0) {
+        var currentDropdown = _this2.dropdowns[_this2.currentlyOpen];
+        if (currentDropdown.menuElement !== e.target) {
+          _this2.close(_this2.currentlyOpen);
+        }
+      }
+    });
+  }]).directive('dropdown', ['$document', '$parse', 'DropdownService', function ($document, $parse, DropdownService) {
     return {
       restrict: 'A',
       scope: {
         dropdown: '=?',
-        disabled: '&dropdownDisabled',
-        opened: '@'
+        disabled: '&dropdownDisabled'
       },
       link: function link($scope, element, attrs) {
         var dropdownField = element[0].querySelector('.ng-dropdown-field'),
             openClass = attrs.dropdownOpenClass || 'open',
             activeClass = attrs.dropdownActiveClass || 'active',
-            options;
-        $scope.opened = false;
+            options,
+            dropdown;
 
-        $scope.dropdown = { id: DropdownService.dropdowns.length };
-        DropdownService.dropdowns[$scope.dropdown.id] = {
+        dropdown = {
+          id: DropdownService.dropdowns.length,
           activeClass: activeClass,
           openClass: openClass,
           element: element,
           menuElement: angular.element(document.getElementById(attrs.dropdownMenu))
         };
+
+        $scope.dropdown = DropdownService.dropdowns[dropdown.id] = dropdown;
 
         $scope.$watch('disabled()', function (val) {
           if (val) {
@@ -67,40 +95,6 @@
             element.removeClass('dropdown-disabled');
           }
         });
-
-        function open() {
-          if (!$scope.opened) {
-            $scope.$apply(function () {
-              DropdownService.menuElement.addClass(openClass);
-              DropdownService.element.addClass(activeClass);
-              $scope.opened = true;
-
-              var dropdown = DropdownService.dropdowns[$scope.dropdown];
-              dropdown.opened = true;
-            });
-          }
-        }
-
-        function close() {
-          $scope.$apply(function () {
-            DropdownService.menuElement.removeClass(openClass);
-            DropdownService.element.removeClass(activeClass);
-            $scope.opened = false;
-
-            var dropdown = DropdownService.dropdowns[$scope.dropdown];
-            dropdown.opened = false;
-
-            clearCurrentOption();
-          });
-        }
-
-        function toggle() {
-          if ($scope.opened) {
-            close();
-          } else {
-            open();
-          }
-        }
 
         function getOptions() {
           return Array.prototype.map.call(DropdownService.menuElement.children(), function (option) {
@@ -116,7 +110,7 @@
         }
 
         function nextOption() {
-          open();
+          DropdownService.open(dropdown.id);
           if (!options) {
             options = getOptions();
             $scope.currentOption = options[0];
@@ -131,7 +125,7 @@
         }
 
         function previousOption() {
-          open();
+          DropdownService.open(dropdown.id);
           if (!options) {
             options = getOptions();
             $scope.currentOption = options[0];
@@ -154,7 +148,7 @@
             var openTarget = angular.element(document.getElementById(attrs.dropdownMenu));
 
             if (DropdownService.menuElement && DropdownService.menuElement.attr('id') !== openTarget.attr('id')) {
-              close();
+              DropdownService.close(dropdown.id);
             }
             DropdownService.menuElement = openTarget;
             DropdownService.element = element;
@@ -162,19 +156,19 @@
             e.preventDefault();
             e.stopPropagation();
 
-            toggle();
+            DropdownService.toggle(dropdown.id);
           }
         });
 
         $document.bind('keydown', function (e) {
-          if (!$scope.disabled() && ($scope.opened || document.activeElement === dropdownField) && [9, 27, 40, 38, 13].indexOf(e.keyCode) !== -1) {
+          if (!$scope.disabled() && (dropdown.opened || document.activeElement === dropdownField) && [9, 27, 40, 38, 13].indexOf(e.keyCode) !== -1) {
 
             DropdownService.element = element;
             DropdownService.menuElement = angular.element(document.getElementById(attrs.dropdownMenu));
 
             if (e.keyCode === 9) {
               // Tab
-              close();
+              DropdownService.close(dropdown.id);
               return;
             } else {
               e.preventDefault();
@@ -183,7 +177,7 @@
 
             if (e.keyCode === 27) {
               // Escape
-              close();
+              DropdownService.close(dropdown.id);
             } else if (e.keyCode === 40) {
               // Down
               nextOption();
@@ -192,18 +186,12 @@
               previousOption();
             } else if (e.keyCode === 13) {
               // Enter
-              if ($scope.currentOption && $scope.opened && document.activeElement === dropdownField) {
+              if ($scope.currentOption && dropdown.opened && document.activeElement === dropdownField) {
                 $scope.currentOption.click();
-              } else if (!$scope.opened && document.activeElement === dropdownField) {
-                open();
+              } else if (!dropdown.opened && document.activeElement === dropdownField) {
+                DropdownService.open(dropdown.id);
               }
             }
-          }
-        });
-
-        $document.bind('click', function (e) {
-          if ($scope.opened && e.target !== DropdownService.menuElement) {
-            close();
           }
         });
       }
