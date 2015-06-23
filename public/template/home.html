@@ -1,33 +1,48 @@
-<h4>Dropdown 1</h4>
-<div dropdown id="dropdown-demo" class="ng-dropdown"
-     dropdown-menu="dropdown-demo-menu"
-     dropdown-open-class="open"
-     dropdown-active-class="active"
-     dropdown-option-class="option">
-  <div class="ng-dropdown-field" tabindex="1">
-    <div class="ng-dropdown-value" ng-bind="selected.one"></div>
+<section>
+  <h4>Dropdown 1</h4>
+</section>
+<section>
+  <div dropdown id="dropdown-demo" class="ng-dropdown"
+       dropdown-menu="dropdown-demo-menu"
+       dropdown-open-class="open"
+       dropdown-active-class="active"
+       dropdown-option-class="option">
+    <div class="ng-dropdown-field" tabindex="1">
+      <div class="ng-dropdown-value" ng-bind="selected.one"></div>
+    </div>
+    <div id="dropdown-demo-menu" class="ng-dropdown-menu">
+      <div ng-repeat="option in options"
+           ng-bind="option"
+           ng-click="selected.one = option"
+           class="option"></div>
+    </div>
   </div>
-  <div id="dropdown-demo-menu" class="ng-dropdown-menu">
-    <div ng-repeat="option in options"
-         ng-bind="option"
-         ng-click="selected.one = option"
-         class="option"></div>
-  </div>
-</div>
+</section>
 <br>
-<h4>Dropdown 2</h4>
-<div dropdown id="dropdown-demo-two" class="ng-dropdown" dropdown-menu="dropdown-demo-menu-two">
-  <div class="ng-dropdown-field"  tabindex="2">
-    <div class="ng-dropdown-value" ng-if="selected.two" ng-bind="selected.two"></div>
-    <!--<div class="ng-dropdown-value placeholder" ng-if="!selected.two">Select a song</div>-->
+<section>
+  <h4>Dropdown 2</h4>
+</section>
+<section>
+  <div class="span-10">
+    <div dropdown="secondDropdown" id="dropdown-demo-two" class="ng-dropdown" dropdown-menu="dropdown-demo-menu-two">
+      <div class="ng-dropdown-field"  tabindex="2">
+        <div class="ng-dropdown-value" ng-if="selected.two" ng-bind="selected.two"></div>
+        <!--<div class="ng-dropdown-value placeholder" ng-if="!selected.two">Select a song</div>-->
+      </div>
+      <div id="dropdown-demo-menu-two" class="ng-dropdown-menu">
+        <div ng-repeat="option in optionsTwo"
+             ng-bind="option"
+             ng-click="selected.two = option"
+             class="option"></div>
+      </div>
+    </div>
   </div>
-  <div id="dropdown-demo-menu-two" class="ng-dropdown-menu">
-    <div ng-repeat="option in optionsTwo"
-         ng-bind="option"
-         ng-click="selected.two = option"
-         class="option"></div>
+  <div class="span-2 align-right">
+    <button class="button font-size-0-9" ng-click="dropdownService.toggle(secondDropdown.id)">
+      Toggle Open/Closed
+    </button>
   </div>
-</div>
+</section>
 <br>
 <h4>Dropdown 3: Disabled if the first option of Dropdown 1 is selected</h4>
 <div dropdown

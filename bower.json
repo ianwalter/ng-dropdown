@@ -1,6 +1,6 @@
 {
   "name": "ng-dropdown",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple AngularJS directive to provide dropdown menu functionality!",
   "keywords": [
     "ng-dropdown",
