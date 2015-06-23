@@ -1,5 +1,5 @@
 /**
- * ng-dropdown - v1.0.2 - A simple AngularJS directive to provide dropdown menu
+ * ng-dropdown - v1.0.3 - A simple AngularJS directive to provide dropdown menu
  * functionality!
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
