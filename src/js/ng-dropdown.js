@@ -1,5 +1,5 @@
 /**
- * ng-dropdown - v1.0.4 - A simple AngularJS directive to provide dropdown menu
+ * ng-dropdown - v1.0.5 - A simple AngularJS directive to provide dropdown menu
  * functionality!
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
@@ -42,6 +42,18 @@
         }
       };
 
+      this.disable = function(id) {
+        var dropdown = this.dropdowns[id];
+        dropdown.element.addClass('dropdown-disabled');
+        dropdown.disabled = true;
+      };
+
+      this.enable = function(id) {
+        var dropdown = this.dropdowns[id];
+        dropdown.element.removeClass('dropdown-disabled');
+        dropdown.disabled = false;
+      };
+
       this.toggle = function(id) {
         var dropdown = this.dropdowns[id];
         if (dropdown.opened) {
@@ -51,14 +63,24 @@
         }
       };
 
-      $document.bind('click', (e) => {
+      this.documentClickHandler = function($event) {
         if (this.currentlyOpen || this.currentlyOpen === 0) {
           var currentDropdown = this.dropdowns[this.currentlyOpen];
-          if (currentDropdown.menuElement !== e.target) {
+          if (currentDropdown.menuElement !== $event.target) {
             this.close(this.currentlyOpen);
           }
         }
-      });
+      };
+
+      $document.bind('click', this.documentClickHandler);
+
+      this.clickHandler = function(dropdown) {
+        return () => {
+          if (!dropdown.disabled) {
+            this.toggle(dropdown.id);
+          }
+        };
+      };
 
     }])
     .directive('dropdown', [
@@ -70,8 +92,7 @@
           restrict: 'A',
           scope: {
             dropdown: '=?',
-            disabled: '&dropdownDisabled',
-            preventOnClick: '=dropdownPreventOnClick'
+            disabled: '=?dropdownDisabled'
           },
           link: function($scope, element, attrs) {
             var dropdownField = element[0].querySelector('.ng-dropdown-field'),
@@ -92,11 +113,11 @@
 
             $scope.dropdown = DropdownService.dropdowns[dropdown.id] = dropdown;
 
-            $scope.$watch('disabled()', function(val) {
-              if (val) {
-                element.addClass('dropdown-disabled');
+            $scope.$watch('disabled', function(disabled) {
+              if (disabled) {
+                DropdownService.disable(dropdown.id);
               } else {
-                element.removeClass('dropdown-disabled');
+                DropdownService.enable(dropdown.id);
               }
             });
 
@@ -156,29 +177,10 @@
                 clearCurrentOption();
               });
 
-            element.bind('click', function(e) {
-              if (!$scope.preventOnClick && !$scope.disabled()) {
-                var openTarget = angular.element(
-                  document.getElementById(attrs.dropdownMenu)
-                );
-
-                if (DropdownService.menuElement &&
-                    DropdownService.menuElement.attr('id') !==
-                    openTarget.attr('id')) {
-                  DropdownService.close(dropdown.id);
-                }
-                DropdownService.menuElement = openTarget;
-                DropdownService.element = element;
-
-                e.preventDefault();
-                e.stopPropagation();
-
-                DropdownService.toggle(dropdown.id);
-              }
-            });
+            element.bind('click', DropdownService.clickHandler(dropdown));
 
             $document.bind('keydown', function(e) {
-              if (!$scope.disabled() &&
+              if (!dropdown.disabled &&
                 (dropdown.opened || document.activeElement === dropdownField) &&
                 [9, 27, 40, 38, 13].indexOf(e.keyCode) !== -1) {
 

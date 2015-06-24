@@ -1,5 +1,5 @@
 /**
- * ng-dropdown - v1.0.4 - A simple AngularJS directive to provide dropdown menu
+ * ng-dropdown - v1.0.5 - A simple AngularJS directive to provide dropdown menu
  * functionality!
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
@@ -10,7 +10,6 @@
   'use strict';
 
   angular.module('ng-dropdown', []).service('DropdownService', ['$document', function ($document) {
-    var _this2 = this;
 
     this.dropdowns = [];
 
@@ -47,6 +46,18 @@
       }
     };
 
+    this.disable = function (id) {
+      var dropdown = this.dropdowns[id];
+      dropdown.element.addClass('dropdown-disabled');
+      dropdown.disabled = true;
+    };
+
+    this.enable = function (id) {
+      var dropdown = this.dropdowns[id];
+      dropdown.element.removeClass('dropdown-disabled');
+      dropdown.disabled = false;
+    };
+
     this.toggle = function (id) {
       var dropdown = this.dropdowns[id];
       if (dropdown.opened) {
@@ -56,21 +67,32 @@
       }
     };
 
-    $document.bind('click', function (e) {
-      if (_this2.currentlyOpen || _this2.currentlyOpen === 0) {
-        var currentDropdown = _this2.dropdowns[_this2.currentlyOpen];
-        if (currentDropdown.menuElement !== e.target) {
-          _this2.close(_this2.currentlyOpen);
+    this.documentClickHandler = function ($event) {
+      if (this.currentlyOpen || this.currentlyOpen === 0) {
+        var currentDropdown = this.dropdowns[this.currentlyOpen];
+        if (currentDropdown.menuElement !== $event.target) {
+          this.close(this.currentlyOpen);
         }
       }
-    });
+    };
+
+    $document.bind('click', this.documentClickHandler);
+
+    this.clickHandler = function (dropdown) {
+      var _this2 = this;
+
+      return function () {
+        if (!dropdown.disabled) {
+          _this2.toggle(dropdown.id);
+        }
+      };
+    };
   }]).directive('dropdown', ['$document', '$parse', 'DropdownService', function ($document, $parse, DropdownService) {
     return {
       restrict: 'A',
       scope: {
         dropdown: '=?',
-        disabled: '&dropdownDisabled',
-        preventOnClick: '=dropdownPreventOnClick'
+        disabled: '=?dropdownDisabled'
       },
       link: function link($scope, element, attrs) {
         var dropdownField = element[0].querySelector('.ng-dropdown-field'),
@@ -89,11 +111,11 @@
 
         $scope.dropdown = DropdownService.dropdowns[dropdown.id] = dropdown;
 
-        $scope.$watch('disabled()', function (val) {
-          if (val) {
-            element.addClass('dropdown-disabled');
+        $scope.$watch('disabled', function (disabled) {
+          if (disabled) {
+            DropdownService.disable(dropdown.id);
           } else {
-            element.removeClass('dropdown-disabled');
+            DropdownService.enable(dropdown.id);
           }
         });
 
@@ -144,25 +166,10 @@
           clearCurrentOption();
         });
 
-        element.bind('click', function (e) {
-          if (!$scope.preventOnClick && !$scope.disabled()) {
-            var openTarget = angular.element(document.getElementById(attrs.dropdownMenu));
-
-            if (DropdownService.menuElement && DropdownService.menuElement.attr('id') !== openTarget.attr('id')) {
-              DropdownService.close(dropdown.id);
-            }
-            DropdownService.menuElement = openTarget;
-            DropdownService.element = element;
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            DropdownService.toggle(dropdown.id);
-          }
-        });
+        element.bind('click', DropdownService.clickHandler(dropdown));
 
         $document.bind('keydown', function (e) {
-          if (!$scope.disabled() && (dropdown.opened || document.activeElement === dropdownField) && [9, 27, 40, 38, 13].indexOf(e.keyCode) !== -1) {
+          if (!dropdown.disabled && (dropdown.opened || document.activeElement === dropdownField) && [9, 27, 40, 38, 13].indexOf(e.keyCode) !== -1) {
 
             DropdownService.element = element;
             DropdownService.menuElement = angular.element(document.getElementById(attrs.dropdownMenu));
