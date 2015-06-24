@@ -1,7 +1,7 @@
 # [ng-dropdown](http://ianwalter.github.io/ng-dropdown/)
 *A simple AngularJS directive to provide dropdown menu functionality!*
 
-Supports tabIndex and keyboard navigation and selection of options.
+Supports tabIndex, keyboard navigation, and selection of options.
 
 [![Code Climate](https://codeclimate.com/github/ianwalter/ng-dropdown.png)](https://codeclimate.com/github/ianwalter/ng-dropdown)
 
@@ -27,15 +27,15 @@ var app = angular.module('dropdown-demo', ['ngRoute', 'ng-dropdown'])
 #### Step 3: Add the dropdown menu markup
 
 ```html
-<div dropdown id="dropdown-demo" class="ng-dropdown"
-     dropdown-menu="dropdown-demo-menu"
+<div dropdown="myFirstDropdown"
      dropdown-open-class="open"
      dropdown-active-class="active"
-     dropdown-option-class="option">
-  <div class="ng-dropdown-field">
+     dropdown-option-class="option"
+     class="ng-dropdown">
+  <div dropdown-field class="ng-dropdown-field">
     <div class="ng-dropdown-value" ng-bind="selected.one"></div>
   </div>
-  <div id="dropdown-demo-menu" class="ng-dropdown-menu">
+  <div dropdown-menu id="dropdown-demo-menu" class="ng-dropdown-menu">
     <div ng-repeat="option in options"
          ng-bind="option"
          ng-click="selected.one = option"
@@ -44,9 +44,8 @@ var app = angular.module('dropdown-demo', ['ngRoute', 'ng-dropdown'])
 </div>
 ```
 
-```dropdown``` The name of the directive.
-
-```dropdown-menu``` The ID of the dropdown menu you would like to display when the dropdown field is clicked.
+```dropdown``` (value optional) The name of the directive. The value is a variable you can use to bind the dropdown instance.
+Look at the source to get a better idea of what's stored in this object.
 
 ```dropdown-open-class``` (optional) The class that "shows" the dropdown menu which is initially hidden (defaults to 
 "open").
@@ -57,8 +56,6 @@ necessary (defaults to "active").
 ```dropdown-option-class``` (optional) A class added to each option in the dropdown so that the directive can 
 eventually keep of which option is highlighted when using keyboard shortcuts like up arrow and down arrow (defaults to 
 "option").
-
-```opened``` The variable within the scope of the directive that evaluates to true when the dropdown menu is open.
 
 
 #### Disabling the dropdown

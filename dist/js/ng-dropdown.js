@@ -1,5 +1,5 @@
 /**
- * ng-dropdown - v1.0.6 - A simple AngularJS directive to provide dropdown menu
+ * ng-dropdown - v2.0.0 - A simple AngularJS directive to provide dropdown menu
  * functionality!
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
@@ -10,6 +10,7 @@
   'use strict';
 
   angular.module('ng-dropdown', []).service('DropdownService', ['$document', function ($document) {
+    var _this4 = this;
 
     this.dropdowns = [];
 
@@ -43,6 +44,8 @@
         dropdown.opened = false;
 
         delete this.currentlyOpen;
+        delete dropdown.options;
+        this.clearCurrentOption(dropdown);
       }
     };
 
@@ -87,7 +90,117 @@
         }
       };
     };
-  }]).directive('dropdown', ['$document', '$parse', 'DropdownService', function ($document, $parse, DropdownService) {
+
+    this.focusHandler = function (dropdown) {
+      var _this3 = this;
+
+      return function () {
+        return _this3.currentlyFocused = dropdown;
+      };
+    };
+
+    this.blurHandler = function () {
+      return delete _this4.currentlyFocused;
+    };
+
+    this.clearCurrentOption = function (dropdown) {
+      if (dropdown.currentOption) {
+        dropdown.currentOption.removeClass(dropdown.activeClass);
+        delete dropdown.currentOption;
+      }
+    };
+
+    this.mouseenterHandler = function (dropdown) {
+      var _this5 = this;
+
+      return function () {
+        _this5.clearCurrentOption(dropdown);
+        dropdown.isInsideMenu = true;
+      };
+    };
+
+    this.mouseleaveHandler = function (dropdown) {
+      return function () {
+        return dropdown.isInsideMenu = false;
+      };
+    };
+
+    this.populateOptions = function (dropdown) {
+      dropdown.options = Array.prototype.map.call(dropdown.menuElement.children(), function (option) {
+        return angular.element(option);
+      });
+      dropdown.currentOption = angular.element(dropdown.options[0]);
+    };
+
+    this.activateNextOption = function (dropdown) {
+      this.open(dropdown.id);
+      if (!dropdown.options) {
+        this.populateOptions(dropdown);
+      } else {
+        var index = dropdown.options.indexOf(dropdown.currentOption) + 1;
+        this.clearCurrentOption(dropdown);
+        dropdown.currentOption = dropdown.options.length > index ? dropdown.options[index] : dropdown.options[0];
+      }
+      dropdown.currentOption.addClass(dropdown.activeClass);
+      dropdown.menuElement[0].scrollTop = dropdown.currentOption.offsetTop;
+    };
+
+    this.activatePreviousOption = function (dropdown) {
+      this.open(dropdown.id);
+      if (!dropdown.options) {
+        this.populateOptions(dropdown);
+      } else {
+        var index = dropdown.options.indexOf(dropdown.currentOption) - 1;
+        this.clearCurrentOption(dropdown);
+        dropdown.currentOption = index >= 0 ? dropdown.options[index] : dropdown.options[dropdown.options.length - 1];
+      }
+      dropdown.currentOption.addClass(dropdown.activeClass);
+      dropdown.menuElement[0].scrollTop = dropdown.currentOption.offsetTop;
+    };
+
+    this.keyupHandler = function (dropdown) {
+      var _this6 = this;
+
+      return function ($event) {
+        var isActive = document.activeElement === dropdown.fieldElement[0];
+
+        if (!dropdown.disabled && (dropdown.opened || isActive) && [9, 27, 40, 38, 13].indexOf($event.keyCode) !== -1) {
+
+          $event.preventDefault();
+          $event.stopPropagation();
+
+          if ($event.keyCode === 27) {
+            // Escape
+            _this6.close(dropdown.id);
+          } else if ($event.keyCode === 40) {
+            // Down
+            _this6.activateNextOption(dropdown);
+          } else if ($event.keyCode === 38) {
+            // Up
+            _this6.activatePreviousOption(dropdown);
+          } else if ($event.keyCode === 13) {
+            // Enter
+            if (dropdown.currentOption && dropdown.opened && isActive) {
+              dropdown.currentOption[0].click();
+            } else if (!dropdown.opened && isActive) {
+              _this6.open(dropdown.id);
+            }
+          }
+        }
+      };
+    };
+
+    this.keydownHandler = function (dropdown) {
+      var _this7 = this;
+
+      return function ($event) {
+        if (dropdown.opened && $event.keyCode === 9) {
+          // Tab
+          _this7.close(dropdown.id);
+        }
+      };
+    };
+  }]).directive('dropdown', ['$parse', 'DropdownService', function ($parse, DropdownService) {
     return {
       restrict: 'A',
       scope: {
@@ -95,10 +208,10 @@
         disabled: '=?dropdownDisabled'
       },
       link: function link($scope, element, attrs) {
-        var dropdownField = element[0].querySelector('.ng-dropdown-field'),
-            openClass = attrs.dropdownOpenClass || 'open',
+        var openClass = attrs.dropdownOpenClass || 'open',
             activeClass = attrs.dropdownActiveClass || 'active',
-            options,
+            dropdownMenu = element[0].querySelector('[dropdown-menu]'),
+            dropdownField = element[0].querySelector('[dropdown-field]'),
             dropdown;
 
         dropdown = {
@@ -106,7 +219,8 @@
           activeClass: activeClass,
           openClass: openClass,
           element: element,
-          menuElement: angular.element(document.getElementById(attrs.dropdownMenu))
+          fieldElement: angular.element(dropdownField),
+          menuElement: angular.element(dropdownMenu)
         };
 
         $scope.dropdown = DropdownService.dropdowns[dropdown.id] = dropdown;
@@ -119,89 +233,19 @@
           }
         });
 
-        function getOptions() {
-          return Array.prototype.map.call(DropdownService.menuElement.children(), function (option) {
-            return option;
-          });
-        }
-
-        function clearCurrentOption() {
-          if ($scope.currentOption) {
-            angular.element($scope.currentOption).removeClass(activeClass);
-            delete $scope.currentOption;
-          }
-        }
-
-        function nextOption() {
-          DropdownService.open(dropdown.id);
-          if (!options) {
-            options = getOptions();
-            $scope.currentOption = options[0];
-          } else {
-            var index = options.indexOf($scope.currentOption) + 1;
-            clearCurrentOption();
-            $scope.currentOption = options.length > index ? options[index] : options[0];
-          }
-          angular.element($scope.currentOption).addClass(activeClass);
-
-          DropdownService.menuElement[0].scrollTop = $scope.currentOption.offsetTop;
-        }
-
-        function previousOption() {
-          DropdownService.open(dropdown.id);
-          if (!options) {
-            options = getOptions();
-            $scope.currentOption = options[0];
-          } else {
-            var index = options.indexOf($scope.currentOption) - 1;
-            clearCurrentOption();
-            $scope.currentOption = index >= 0 ? options[index] : options[options.length - 1];
-          }
-          angular.element($scope.currentOption).addClass(activeClass);
-
-          DropdownService.menuElement[0].scrollTop = $scope.currentOption.offsetTop;
-        }
-
-        angular.element(document.getElementById(attrs.dropdownMenu)).bind('mouseenter', function () {
-          clearCurrentOption();
-        });
-
         element.bind('click', DropdownService.clickHandler(dropdown));
 
-        $document.bind('keydown', function (e) {
-          if (!dropdown.disabled && (dropdown.opened || document.activeElement === dropdownField) && [9, 27, 40, 38, 13].indexOf(e.keyCode) !== -1) {
+        element.bind('focus', DropdownService.focusHandler(dropdown));
 
-            DropdownService.element = element;
-            DropdownService.menuElement = angular.element(document.getElementById(attrs.dropdownMenu));
+        element.bind('blur', DropdownService.blurHandler);
 
-            if (e.keyCode === 9) {
-              // Tab
-              DropdownService.close(dropdown.id);
-              return;
-            } else {
-              e.preventDefault();
-              e.stopPropagation();
-            }
+        dropdown.menuElement.bind('mouseenter', DropdownService.mouseenterHandler(dropdown));
 
-            if (e.keyCode === 27) {
-              // Escape
-              DropdownService.close(dropdown.id);
-            } else if (e.keyCode === 40) {
-              // Down
-              nextOption();
-            } else if (e.keyCode === 38) {
-              // Up
-              previousOption();
-            } else if (e.keyCode === 13) {
-              // Enter
-              if ($scope.currentOption && dropdown.opened && document.activeElement === dropdownField) {
-                $scope.currentOption.click();
-              } else if (!dropdown.opened && document.activeElement === dropdownField) {
-                DropdownService.open(dropdown.id);
-              }
-            }
-          }
-        });
+        dropdown.menuElement.bind('mouseleave', DropdownService.mouseleaveHandler(dropdown));
+
+        dropdown.fieldElement.bind('keyup', DropdownService.keyupHandler(dropdown));
+
+        dropdown.fieldElement.bind('keydown', DropdownService.keydownHandler(dropdown));
       }
     };
   }]);
