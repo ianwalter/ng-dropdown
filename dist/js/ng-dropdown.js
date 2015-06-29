@@ -89,7 +89,7 @@
       var _this3 = this;
 
       return function ($event) {
-        if (!dropdown.disabled && !dropdown.disableClick && $event.target !== dropdown.element) {
+        if (!dropdown.disabled && !dropdown.disableClick) {
           _this3.toggle(dropdown.id);
         }
       };

@@ -81,7 +81,7 @@
 
       this.clickHandler = function(dropdown) {
         return ($event) => {
-          if (!dropdown.disabled && !dropdown.disableClick && $event.target !== dropdown.element) {
+          if (!dropdown.disabled && !dropdown.disableClick) {
             this.toggle(dropdown.id);
           }
         };
