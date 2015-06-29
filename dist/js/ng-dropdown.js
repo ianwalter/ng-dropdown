@@ -1,5 +1,5 @@
 /**
- * ng-dropdown - v2.0.0 - A simple AngularJS directive to provide dropdown menu
+ * ng-dropdown - v2.0.1 - A simple AngularJS directive to provide dropdown menu
  * functionality!
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
@@ -10,7 +10,7 @@
   'use strict';
 
   angular.module('ng-dropdown', []).service('DropdownService', ['$document', function ($document) {
-    var _this4 = this;
+    var _this5 = this;
 
     this.dropdowns = [];
 
@@ -70,37 +70,41 @@
       }
     };
 
-    this.documentClickHandler = function ($event) {
-      if (this.currentlyOpen || this.currentlyOpen === 0) {
-        var currentDropdown = this.dropdowns[this.currentlyOpen];
-        if (currentDropdown.menuElement !== $event.target && !currentDropdown.disableDocumentClick) {
-          this.close(this.currentlyOpen);
-        }
-      }
-    };
-
-    $document.bind('click', this.documentClickHandler);
-
-    this.clickHandler = function (dropdown) {
+    this.documentClickHandler = function () {
       var _this2 = this;
 
-      return function () {
-        if (!dropdown.disabled && !dropdown.disableClick) {
-          _this2.toggle(dropdown.id);
+      return function ($event) {
+        if (_this2.currentlyOpen || _this2.currentlyOpen === 0) {
+          var currentDropdown = _this2.dropdowns[_this2.currentlyOpen];
+          if (currentDropdown.menuElement !== $event.target && !currentDropdown.disableDocumentClick) {
+            _this2.close(_this2.currentlyOpen);
+          }
+        }
+      };
+    };
+
+    $document.bind('click', this.documentClickHandler());
+
+    this.clickHandler = function (dropdown) {
+      var _this3 = this;
+
+      return function ($event) {
+        if (!dropdown.disabled && !dropdown.disableClick && $event.target !== dropdown.element) {
+          _this3.toggle(dropdown.id);
         }
       };
     };
 
     this.focusHandler = function (dropdown) {
-      var _this3 = this;
+      var _this4 = this;
 
       return function () {
-        return _this3.currentlyFocused = dropdown;
+        return _this4.currentlyFocused = dropdown;
       };
     };
 
     this.blurHandler = function () {
-      return delete _this4.currentlyFocused;
+      return delete _this5.currentlyFocused;
     };
 
     this.clearCurrentOption = function (dropdown) {
@@ -111,10 +115,10 @@
     };
 
     this.mouseenterHandler = function (dropdown) {
-      var _this5 = this;
+      var _this6 = this;
 
       return function () {
-        _this5.clearCurrentOption(dropdown);
+        _this6.clearCurrentOption(dropdown);
         dropdown.isInsideMenu = true;
       };
     };
@@ -159,7 +163,7 @@
     };
 
     this.keyupHandler = function (dropdown) {
-      var _this6 = this;
+      var _this7 = this;
 
       return function ($event) {
         var isActive = document.activeElement === dropdown.fieldElement[0];
@@ -171,19 +175,19 @@
 
           if ($event.keyCode === 27) {
             // Escape
-            _this6.close(dropdown.id);
+            _this7.close(dropdown.id);
           } else if ($event.keyCode === 40) {
             // Down
-            _this6.activateNextOption(dropdown);
+            _this7.activateNextOption(dropdown);
           } else if ($event.keyCode === 38) {
             // Up
-            _this6.activatePreviousOption(dropdown);
+            _this7.activatePreviousOption(dropdown);
           } else if ($event.keyCode === 13) {
             // Enter
             if (dropdown.currentOption && dropdown.opened && isActive) {
               dropdown.currentOption[0].click();
             } else if (!dropdown.opened && isActive) {
-              _this6.open(dropdown.id);
+              _this7.open(dropdown.id);
             }
           }
         }
@@ -191,12 +195,12 @@
     };
 
     this.keydownHandler = function (dropdown) {
-      var _this7 = this;
+      var _this8 = this;
 
       return function ($event) {
         if (dropdown.opened && $event.keyCode === 9) {
           // Tab
-          _this7.close(dropdown.id);
+          _this8.close(dropdown.id);
         }
       };
     };

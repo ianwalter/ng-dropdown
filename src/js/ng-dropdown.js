@@ -1,5 +1,5 @@
 /**
- * ng-dropdown - v2.0.0 - A simple AngularJS directive to provide dropdown menu
+ * ng-dropdown - v2.0.1 - A simple AngularJS directive to provide dropdown menu
  * functionality!
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
@@ -65,21 +65,23 @@
         }
       };
 
-      this.documentClickHandler = function($event) {
-        if (this.currentlyOpen || this.currentlyOpen === 0) {
-          var currentDropdown = this.dropdowns[this.currentlyOpen];
-          if (currentDropdown.menuElement !== $event.target &&
-              !currentDropdown.disableDocumentClick) {
-            this.close(this.currentlyOpen);
+      this.documentClickHandler = function() {
+        return ($event) => {
+          if (this.currentlyOpen || this.currentlyOpen === 0) {
+            var currentDropdown = this.dropdowns[this.currentlyOpen];
+            if (currentDropdown.menuElement !== $event.target &&
+                !currentDropdown.disableDocumentClick) {
+              this.close(this.currentlyOpen);
+            }
           }
-        }
+        };
       };
 
-      $document.bind('click', this.documentClickHandler);
+      $document.bind('click', this.documentClickHandler());
 
       this.clickHandler = function(dropdown) {
-        return () => {
-          if (!dropdown.disabled && !dropdown.disableClick) {
+        return ($event) => {
+          if (!dropdown.disabled && !dropdown.disableClick && $event.target !== dropdown.element) {
             this.toggle(dropdown.id);
           }
         };
@@ -182,6 +184,7 @@
           }
         };
       };
+
     }])
     .directive('dropdown', [
       '$parse',
