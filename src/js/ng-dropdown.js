@@ -80,7 +80,7 @@
       $document.bind('click', this.documentClickHandler());
 
       this.clickHandler = function(dropdown) {
-        return ($event) => {
+        return () => {
           if (!dropdown.disabled && !dropdown.disableClick) {
             this.toggle(dropdown.id);
           }

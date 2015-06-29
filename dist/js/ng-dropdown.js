@@ -88,7 +88,7 @@
     this.clickHandler = function (dropdown) {
       var _this3 = this;
 
-      return function ($event) {
+      return function () {
         if (!dropdown.disabled && !dropdown.disableClick) {
           _this3.toggle(dropdown.id);
         }
